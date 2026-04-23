@@ -20,8 +20,10 @@ npm-debug.log*
 Thumbs.db
 
 # IDE
-.vscode/
 .idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # Uploads
 backend/uploads/

@@ -1,6 +1,7 @@
 # 📌 Plan-01: Project Setup & Foundational Architecture
 
 ## 🎯 Goal
+
 Establish the foundational structure for backend and frontend, configure development environment, and prepare the system for feature development with test-first workflow.
 
 ---
@@ -8,6 +9,7 @@ Establish the foundational structure for backend and frontend, configure develop
 ## 📦 Scope
 
 This plan includes:
+
 - Repository structure setup
 - Backend base setup (Express + config + structure)
 - Frontend base setup (React + Vite)
@@ -31,6 +33,7 @@ This plan includes:
 ## 📤 Expected Output
 
 By the end of this plan:
+
 - Project runs via Docker
 - Backend server runs with clean structure
 - Frontend runs with routing setup
@@ -45,12 +48,15 @@ By the end of this plan:
 ---
 
 ## 🅐 Phase A — Repository & Folder Structure Setup
+
 **Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Create clean and scalable folder structure for backend and frontend.
 
 ### ⚙️ Steps
+
 1. Initialize root project
 2. Create:
    - backend/
@@ -82,20 +88,24 @@ Create clean and scalable folder structure for backend and frontend.
 ---
 
 ### ✅ Verification
+
 - Folder structure matches defined architecture
 - No unnecessary files present
 
 ---
 
 ## 🅑 Phase B — Backend Base Setup
+
 **Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Initialize Express app with scalable architecture.
 
 ---
 
 ### ⚙️ Steps
+
 1. Initialize Node project
 2. Install dependencies:
    - express
@@ -119,20 +129,24 @@ Initialize Express app with scalable architecture.
 ---
 
 ### ✅ Verification
+
 - Server runs successfully
 - DB connects successfully
 
 ---
 
 ## 🅒 Phase C — Base Architecture (Core Utilities)
+
 **Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Setup reusable core utilities.
 
 ---
 
 ### ⚙️ Steps
+
 1. Create standardized API response utility
 2. Create error class utility
 3. Setup centralized error middleware
@@ -141,20 +155,24 @@ Setup reusable core utilities.
 ---
 
 ### ✅ Verification
+
 - API responses follow standard format
 - Errors handled centrally
 
 ---
 
 ## 🅓 Phase D — Testing Setup (Test-First Foundation)
+
 **Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Prepare full backend testing environment.
 
 ---
 
 ### ⚙️ Steps
+
 1. Install:
    - jest
    - supertest
@@ -171,25 +189,30 @@ Prepare full backend testing environment.
 ---
 
 ### 🧪 Test Cases
+
 - Basic health check endpoint
 
 ---
 
 ### ✅ Verification
+
 - `npm test` runs successfully
 - Test passes
 
 ---
 
 ## 🅔 Phase E — Frontend Base Setup
+
 **Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Initialize React app with routing.
 
 ---
 
 ### ⚙️ Steps
+
 1. Setup React (Vite)
 2. Install:
    - react-router-dom
@@ -207,20 +230,24 @@ Initialize React app with routing.
 ---
 
 ### ✅ Verification
+
 - App runs
 - Routes work
 
 ---
 
 ## 🅕 Phase F — Linting & Formatting
-**Status:** ⏳ Pending
+
+**Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Ensure code quality and consistency.
 
 ---
 
 ### ⚙️ Steps
+
 1. Setup ESLint
 2. Setup Prettier
 3. Add scripts:
@@ -230,19 +257,23 @@ Ensure code quality and consistency.
 ---
 
 ### ✅ Verification
+
 - Lint passes without errors
 
 ---
 
 ## 🅖 Phase G — Docker Setup
-**Status:** ⏳ Pending
+
+**Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Containerize full application.
 
 ---
 
 ### ⚙️ Steps
+
 1. Create Dockerfile for backend
 2. Create Dockerfile for frontend
 3. Setup docker-compose:
@@ -255,20 +286,24 @@ Containerize full application.
 ---
 
 ### ✅ Verification
+
 - `docker-compose up` runs successfully
 - All services connected
 
 ---
 
 ## 🅗 Phase H — Environment Configuration
-**Status:** ⏳ Pending
+
+**Status:** ✅ Completed
 
 ### 🎯 Objective
+
 Setup environment variables properly.
 
 ---
 
 ### ⚙️ Steps
+
 1. backend/.env.example
 2. frontend/.env.example
 3. Add required variables:
@@ -279,6 +314,7 @@ Setup environment variables properly.
 ---
 
 ### ✅ Verification
+
 - App runs using env variables
 
 ---
