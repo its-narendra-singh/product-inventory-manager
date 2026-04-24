@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PageLayout } from '../components/layout';
+import { Button } from '../components/ui';
 import { Skeleton } from '../components/ui/Skeleton';
 import { useDashboardStats } from '../hooks/useDashboard';
 import { useAuth } from '../hooks/useAuth';
@@ -100,7 +101,7 @@ function LowStockBar({ lowStockCount, totalProducts }: { lowStockCount: number; 
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { data, isLoading, isError } = useDashboardStats();
+  const { data, isLoading, isError, refetch } = useDashboardStats();
 
   return (
     <PageLayout>
@@ -115,8 +116,14 @@ export default function DashboardPage() {
 
         {/* Stat cards */}
         {isError ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
-            Failed to load dashboard stats. Please refresh the page.
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-red-700">Failed to load dashboard stats</p>
+              <p className="mt-0.5 text-xs text-red-500">Check your connection and try again.</p>
+            </div>
+            <Button variant="secondary" size="sm" onClick={() => refetch()}>
+              Retry
+            </Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
