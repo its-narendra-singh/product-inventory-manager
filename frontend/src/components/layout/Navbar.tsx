@@ -1,4 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '../../hooks/useAuth';
 
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -6,10 +8,14 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
+  const qc = useQueryClient();
 
-  function handleLogout() {
-    navigate('/login');
+  async function handleLogout() {
+    await logout();
+    qc.clear();
+    navigate('/login', { replace: true });
   }
 
   return (
@@ -36,12 +42,18 @@ export default function Navbar() {
             ))}
           </nav>
         </div>
-        <button
-          onClick={handleLogout}
-          className="text-sm text-gray-500 hover:text-gray-700 transition-colors px-3 py-1.5 rounded-md hover:bg-gray-100"
-        >
-          Log out
-        </button>
+
+        <div className="flex items-center gap-3">
+          {user?.name && (
+            <span className="text-sm text-gray-500 hidden sm:block">{user.name}</span>
+          )}
+          <button
+            onClick={handleLogout}
+            className="text-sm text-gray-500 hover:text-gray-700 transition-colors px-3 py-1.5 rounded-md hover:bg-gray-100"
+          >
+            Log out
+          </button>
+        </div>
       </div>
     </header>
   );
