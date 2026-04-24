@@ -7,6 +7,7 @@ import DashboardPage from '../pages/DashboardPage';
 import ProductsPage from '../pages/ProductsPage';
 import CreateProductPage from '../pages/CreateProductPage';
 import EditProductPage from '../pages/EditProductPage';
+import ViewProductPage from '../pages/ViewProductPage';
 
 export default function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ export default function AppRoutes() {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/new" element={<CreateProductPage />} />
         <Route path="/products/:id/edit" element={<EditProductPage />} />
+        <Route path="/products/:id" element={<ViewProductPage />} />
       </Route>
 
       <Route path="/" element={<Navigate to="/dashboard" replace />} />

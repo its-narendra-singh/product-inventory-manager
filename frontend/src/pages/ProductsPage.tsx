@@ -311,6 +311,11 @@ export default function ProductsPage() {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <Link to={`/products/${product._id}`}>
+                          <Button variant="secondary" size="sm">
+                            View
+                          </Button>
+                        </Link>
                         <Link to={`/products/${product._id}/edit`}>
                           <Button variant="secondary" size="sm">
                             Edit
