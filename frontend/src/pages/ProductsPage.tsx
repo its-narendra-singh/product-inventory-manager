@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PageLayout } from '../components/layout';
 import { Button } from '../components/ui';
@@ -43,29 +43,37 @@ export default function ProductsPage() {
   const debouncedSearch = useDebounce(searchInput, 400);
   const debouncedCategory = useDebounce(categoryInput, 400);
 
-  // Sync debounced text into URL params
+  // Skip the initial mount fire — only sync to URL when the value actually changes
+  const isMounted = useRef(false);
   useEffect(() => {
-    if (debouncedSearch === (searchParams.get('search') ?? '')) return;
+    if (!isMounted.current) return;
     setParam('search', debouncedSearch);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch]);
+  }, [debouncedSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (debouncedCategory === (searchParams.get('category') ?? '')) return;
+    if (!isMounted.current) return;
     setParam('category', debouncedCategory);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedCategory]);
+  }, [debouncedCategory]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    isMounted.current = true;
+  }, []);
 
   const { data, isLoading, isError, refetch } = useProducts(query);
   const deleteMutation = useDeleteProduct();
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
 
   function setParam(key: string, value: string) {
-    const next = new URLSearchParams(searchParams);
-    if (value) next.set(key, value);
-    else next.delete(key);
-    if (key !== 'page') next.delete('page');
-    setSearchParams(next, { replace: true });
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value) next.set(key, value);
+        else next.delete(key);
+        if (key !== 'page') next.delete('page');
+        return next;
+      },
+      { replace: true }
+    );
   }
 
   function clearFilters() {
@@ -215,10 +223,7 @@ export default function ProductsPage() {
                     Try adjusting your search or filters.
                   </p>
                 </div>
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-blue-600 hover:underline"
-                >
+                <button onClick={clearFilters} className="text-sm text-blue-600 hover:underline">
                   Clear all filters
                 </button>
               </div>
@@ -233,7 +238,9 @@ export default function ProductsPage() {
                   </p>
                 </div>
                 <Link to="/products/new">
-                  <Button variant="primary" size="sm">+ Add product</Button>
+                  <Button variant="primary" size="sm">
+                    + Add product
+                  </Button>
                 </Link>
               </div>
             )
@@ -289,13 +296,11 @@ export default function ProductsPage() {
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link to={`/products/${product._id}/edit`}>
-                          <Button variant="secondary" size="sm">Edit</Button>
+                          <Button variant="secondary" size="sm">
+                            Edit
+                          </Button>
                         </Link>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => setDeleteTarget(product)}
-                        >
+                        <Button variant="danger" size="sm" onClick={() => setDeleteTarget(product)}>
                           Delete
                         </Button>
                       </div>

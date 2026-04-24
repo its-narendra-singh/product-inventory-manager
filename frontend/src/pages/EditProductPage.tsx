@@ -1,5 +1,6 @@
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { PageLayout } from '../components/layout';
+import { Button } from '../components/ui';
 import ProductForm from '../components/products/ProductForm';
 import { SkeletonCard } from '../components/ui/Skeleton';
 import { useProduct, useUpdateProduct } from '../hooks/useProducts';
@@ -8,7 +9,7 @@ import type { ProductFormData } from '../services/product.service';
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: product, isLoading, isError } = useProduct(id!);
+  const { data: product, isLoading, isError, refetch } = useProduct(id!);
   const { mutateAsync, isPending } = useUpdateProduct(id!);
 
   async function handleSubmit(data: ProductFormData) {
@@ -33,7 +34,22 @@ export default function EditProductPage() {
               <SkeletonCard />
             </div>
           ) : isError || !product ? (
-            <p className="text-sm text-red-600">Product not found or you don't have access.</p>
+            <div className="flex flex-col items-center gap-3 py-8 text-center">
+              <p className="font-medium text-gray-900">Product not found</p>
+              <p className="text-sm text-gray-500">
+                It may have been deleted or you don't have access.
+              </p>
+              <div className="flex gap-3">
+                <Button variant="secondary" size="sm" onClick={() => refetch()}>
+                  Retry
+                </Button>
+                <Link to="/products">
+                  <Button variant="primary" size="sm">
+                    Back to products
+                  </Button>
+                </Link>
+              </div>
+            </div>
           ) : (
             <ProductForm
               initial={product}

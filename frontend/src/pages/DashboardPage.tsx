@@ -57,7 +57,13 @@ function StatCardSkeleton() {
   );
 }
 
-function LowStockBar({ lowStockCount, totalProducts }: { lowStockCount: number; totalProducts: number }) {
+function LowStockBar({
+  lowStockCount,
+  totalProducts,
+}: {
+  lowStockCount: number;
+  totalProducts: number;
+}) {
   const pct = totalProducts > 0 ? Math.round((lowStockCount / totalProducts) * 100) : 0;
   const barColor = pct >= 50 ? 'bg-red-500' : pct >= 25 ? 'bg-amber-400' : 'bg-green-500';
 
@@ -67,7 +73,9 @@ function LowStockBar({ lowStockCount, totalProducts }: { lowStockCount: number; 
       <div className="space-y-3">
         <div className="flex justify-between text-sm">
           <span className="text-gray-500">Low stock ratio</span>
-          <span className="font-medium text-gray-900">{lowStockCount} / {totalProducts} products</span>
+          <span className="font-medium text-gray-900">
+            {lowStockCount} / {totalProducts} products
+          </span>
         </div>
         <div className="h-2.5 w-full rounded-full bg-gray-100 overflow-hidden">
           <div
@@ -163,10 +171,7 @@ export default function DashboardPage() {
 
         {/* Inventory health bar */}
         {!isLoading && !isError && data && (
-          <LowStockBar
-            lowStockCount={data.lowStockCount}
-            totalProducts={data.totalProducts}
-          />
+          <LowStockBar lowStockCount={data.lowStockCount} totalProducts={data.totalProducts} />
         )}
 
         {/* Quick actions */}

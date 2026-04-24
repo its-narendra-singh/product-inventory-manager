@@ -44,9 +44,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          {user?.name && (
-            <span className="text-sm text-gray-500 hidden sm:block">{user.name}</span>
-          )}
+          {user?.name && <span className="text-sm text-gray-500 hidden sm:block">{user.name}</span>}
           <button
             onClick={handleLogout}
             className="text-sm text-gray-500 hover:text-gray-700 transition-colors px-3 py-1.5 rounded-md hover:bg-gray-100"
