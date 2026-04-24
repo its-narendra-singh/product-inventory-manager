@@ -22,6 +22,13 @@ afterEach(async () => {
 const userA = { name: 'User A', email: 'usera@example.com', password: 'password123' };
 const userB = { name: 'User B', email: 'userb@example.com', password: 'password123' };
 
+// Minimal valid 1×1 PNG (no fs read needed)
+const TINY_PNG = Buffer.from(
+  '89504e470d0a1a0a0000000d49484452000000010000000108060000001f' +
+    '15c4890000000a49444154789c6260000000020001e221bc330000000049454e44ae426082',
+  'hex'
+);
+
 const validProduct = {
   name: 'Widget Pro',
   description: 'A high quality widget',
@@ -42,6 +49,23 @@ const registerAndLogin = async (user) => {
 
 const createProduct = (token, body = validProduct) =>
   request(app).post('/api/products').set('Authorization', `Bearer ${token}`).send(body);
+
+// Sends product fields + optional image as multipart/form-data
+const createProductMultipart = (token, fields = validProduct, imageBuffer = null) => {
+  let req = request(app).post('/api/products').set('Authorization', `Bearer ${token}`);
+  Object.entries(fields).forEach(([k, v]) => req.field(k, String(v)));
+  if (imageBuffer)
+    req = req.attach('image', imageBuffer, { filename: 'product.png', contentType: 'image/png' });
+  return req;
+};
+
+const updateProductMultipart = (token, id, fields = {}, imageBuffer = null) => {
+  let req = request(app).put(`/api/products/${id}`).set('Authorization', `Bearer ${token}`);
+  Object.entries(fields).forEach(([k, v]) => req.field(k, String(v)));
+  if (imageBuffer)
+    req = req.attach('image', imageBuffer, { filename: 'update.png', contentType: 'image/png' });
+  return req;
+};
 
 const getProducts = (token, query = '') =>
   request(app).get(`/api/products${query}`).set('Authorization', `Bearer ${token}`);
@@ -147,6 +171,46 @@ describe('Products API', () => {
         const res = await createProduct(token, { ...validProduct, sku: 'SKU-DUP' });
 
         expect(res.statusCode).toBe(409);
+        expect(res.body.success).toBe(false);
+      });
+    });
+
+    describe('Image Upload (multipart/form-data)', () => {
+      it('creates a product with an image and returns imageUrl in data', async () => {
+        const token = await registerAndLogin(userA);
+
+        const res = await createProductMultipart(token, validProduct, TINY_PNG);
+
+        expect(res.statusCode).toBe(201);
+        expect(res.body.success).toBe(true);
+        expect(res.body.data).toHaveProperty('imageUrl');
+        expect(res.body.data.imageUrl).toMatch(/^\/uploads\/.+/);
+      });
+
+      it('creates a product without an image via multipart and omits imageUrl', async () => {
+        const token = await registerAndLogin(userA);
+
+        const res = await createProductMultipart(token, validProduct, null);
+
+        expect(res.statusCode).toBe(201);
+        expect(res.body.success).toBe(true);
+        // imageUrl should not be set (undefined or null)
+        expect(res.body.data.imageUrl == null).toBe(true);
+      });
+
+      it('returns 400 when a non-image file is attached on product create', async () => {
+        const token = await registerAndLogin(userA);
+        const textBuffer = Buffer.from('not an image');
+
+        let req = request(app)
+          .post('/api/products')
+          .set('Authorization', `Bearer ${token}`)
+          .attach('image', textBuffer, { filename: 'doc.txt', contentType: 'text/plain' });
+        Object.entries(validProduct).forEach(([k, v]) => req.field(k, String(v)));
+
+        const res = await req;
+
+        expect(res.statusCode).toBe(400);
         expect(res.body.success).toBe(false);
       });
     });
@@ -455,6 +519,35 @@ describe('Products API', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.data.stock).toBe(999);
         expect(res.body.data.name).toBe(validProduct.name);
+      });
+
+      it('updates imageUrl when an image is attached via multipart', async () => {
+        const token = await registerAndLogin(userA);
+        const created = await createProduct(token);
+        const id = created.body.data._id;
+
+        const res = await updateProductMultipart(token, id, { name: 'With Image' }, TINY_PNG);
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.success).toBe(true);
+        expect(res.body.data).toHaveProperty('imageUrl');
+        expect(res.body.data.imageUrl).toMatch(/^\/uploads\/.+/);
+        expect(res.body.data.name).toBe('With Image');
+      });
+
+      it('does not change imageUrl when no image is attached on update', async () => {
+        const token = await registerAndLogin(userA);
+        // Create with an image first
+        const created = await createProductMultipart(token, validProduct, TINY_PNG);
+        const id = created.body.data._id;
+        const originalImageUrl = created.body.data.imageUrl;
+
+        // Update only the name, no image attached
+        const res = await updateProductMultipart(token, id, { name: 'No Image Update' }, null);
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.data.name).toBe('No Image Update');
+        expect(res.body.data.imageUrl).toBe(originalImageUrl);
       });
     });
 

@@ -9,7 +9,8 @@ import {
 } from '../services/product.service.js';
 
 export const create = asyncHandler(async (req, res) => {
-  const product = await createProduct(req.body, req.user._id);
+  const data = req.file ? { ...req.body, imageUrl: `/uploads/${req.file.filename}` } : req.body;
+  const product = await createProduct(data, req.user._id);
   sendSuccess(res, { statusCode: 201, message: 'Product created successfully', data: product });
 });
 
@@ -24,7 +25,8 @@ export const getOne = asyncHandler(async (req, res) => {
 });
 
 export const update = asyncHandler(async (req, res) => {
-  const product = await updateProduct(req.params.id, req.user._id, req.body);
+  const data = req.file ? { ...req.body, imageUrl: `/uploads/${req.file.filename}` } : req.body;
+  const product = await updateProduct(req.params.id, req.user._id, data);
   sendSuccess(res, { message: 'Product updated successfully', data: product });
 });
 
