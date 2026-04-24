@@ -8,6 +8,22 @@ import { useProducts, useDeleteProduct } from '../hooks/useProducts';
 import { useDebounce } from '../hooks/useDebounce';
 import type { Product, ProductQuery } from '../services/product.service';
 
+interface ImageWithFallbackProps {
+  src: string;
+  alt: string;
+  className: string;
+}
+
+function ImageWithFallback({ src, alt, className }: ImageWithFallbackProps) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return <div className={`${className} bg-gray-100`} />;
+  }
+
+  return <img src={src} alt={alt} className={className} onError={() => setHasError(true)} />;
+}
+
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
 
 const SORT_OPTIONS = [
@@ -261,7 +277,7 @@ export default function ProductsPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {product.imageUrl ? (
-                          <img
+                          <ImageWithFallback
                             src={`${BASE_URL}${product.imageUrl}`}
                             alt={product.name}
                             className="h-9 w-9 rounded-md object-cover border border-gray-200 shrink-0"
