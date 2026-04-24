@@ -1,5 +1,9 @@
 import AppRoutes from './routes/AppRoutes';
 
 export default function App() {
-  return <AppRoutes />;
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      <AppRoutes />
+    </div>
+  );
 }

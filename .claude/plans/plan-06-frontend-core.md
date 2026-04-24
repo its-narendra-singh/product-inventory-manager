@@ -1,69 +1,170 @@
-# 📌 Plan-06: Frontend Core Integration
+# 📌 Plan-06: Frontend Core Integration (React + Tailwind)
 
 ## 🎯 Goal
 
-Integrate frontend with backend APIs and implement core UI.
+Build complete frontend UI and integrate with backend APIs using scalable architecture.
 
 ---
 
 ## 📦 Scope
 
+- Tailwind setup
+- Base UI components
 - Auth UI (login/register)
+- Product UI (CRUD)
 - Dashboard UI
-- Product listing UI
-- Product CRUD UI
-- React Query integration
-- Routing
+- API integration (React Query)
+- Routing + protection
+- UX improvements
 
 ---
 
 ## 📂 References
 
-- `.claude/context.md`
-- `.claude/skills/frontend.md`
+- .claude/context.md
+- .claude/skills/frontend.md
+- .claude/skills/backend.md
 
 ---
 
 ## 📤 Expected Output
 
-- Fully working UI
+- Fully working frontend
+- Clean UI with Tailwind
 - API integration complete
-- Routing working
+- Protected routes working
+- Responsive UI
 
 ---
 
 # 🧩 Phases
 
-## 🅐 Phase A — Auth UI
+---
 
-- Login/Register
+## 🅐 Phase A — Tailwind Setup & Base Config
+
+**Status:** ✅ Complete
+
+### Includes:
+
+- Install Tailwind CSS
+- Configure Tailwind with Vite
+- Setup base styles
+- Verify Tailwind working
 
 ---
 
-## 🅑 Phase B — API Integration
+## 🅑 Phase B — Base UI Components
 
-- Axios + React Query
+**Status:** ✅ Complete
 
----
+### Includes:
 
-## 🅒 Phase C — Product UI
-
-- List, create, edit, delete
-
----
-
-## 🅓 Phase D — Dashboard UI
-
-- Stats display
+- Button component
+- Input component
+- Form wrapper
+- Loader / Skeleton
+- Reusable layout components
 
 ---
 
-## 🅔 Phase E — Routing & Protection
+## 🅒 Phase C — Auth UI (Login/Register)
 
-- Protected routes
+**Status:** ⏳ Pending
+
+### Includes:
+
+- Login page
+- Register page
+- Form validation
+- API integration
 
 ---
 
-## 🅕 Phase F — Verification
+## 🅓 Phase D — API Layer & React Query Setup
 
-- UI fully functional
+**Status:** ⏳ Pending
+
+### Includes:
+
+- Axios instance setup
+- React Query provider
+- Base hooks for API calls
+
+---
+
+## 🅔 Phase E — Product Module UI
+
+**Status:** ⏳ Pending
+
+### Includes:
+
+- Product list page
+- Create product form
+- Edit product form
+- Delete flow
+- Image upload integration
+
+---
+
+## 🅕 Phase F — Dashboard UI
+
+**Status:** ⏳ Pending
+
+### Includes:
+
+- Stats cards
+- Data visualization (basic)
+
+---
+
+## 🅖 Phase G — Routing & Protected Routes
+
+**Status:** ⏳ Pending
+
+### Includes:
+
+- Route setup
+- Auth guard
+- Redirect handling
+
+---
+
+## 🅗 Phase H — UX Enhancements
+
+**Status:** ⏳ Pending
+
+### Includes:
+
+- Debounced search
+- Loading skeletons
+- Error states
+- Empty states
+
+---
+
+## 🅘 Phase I — Final Verification
+
+**Status:** ⏳ Pending
+
+### Includes:
+
+- Full flow testing
+- API integration validation
+- UI consistency check
+
+---
+
+# 🧠 Execution Rules
+
+- Execute ONE phase at a time
+- Do NOT skip phases
+- Do NOT assume UI behavior
+- Follow Tailwind-first approach
+- Use reusable components
+
+---
+
+# 🚀 Start Point
+
+👉 Begin with Phase A
