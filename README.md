@@ -5,6 +5,75 @@ This application allows authenticated users to manage their own product inventor
 
 ---
 
+## 🚀 Quick Start (Recommended — Docker)
+
+### 1. Clone the repository
+
+```bash id="c8px2p"
+git clone <your-repo-url>
+cd product-inventory-manager
+```
+
+---
+
+### 2. Create environment file
+
+Create a `.env` file in the **backend folder**:
+
+```bash id="8c7l2c"
+cd backend
+cp .env.example .env
+```
+
+Update `.env` with required values:
+
+```env id="dbnhg6"
+PORT=5000
+MONGO_URI=mongodb://mongo:27017/product-inventory
+MONGO_TEST_URI=mongodb://mongo:27017/product-inventory-test
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
+```
+
+👉 Important:
+
+- When using Docker, use `mongo` as host (NOT localhost)
+
+---
+
+### 3. (Optional) Frontend environment
+
+Create `.env` in **frontend folder**:
+
+```bash id="r7n91q"
+cd ../frontend
+cp .env.example .env
+```
+
+```env id="8rcs1w"
+VITE_API_URL=http://localhost:5000
+```
+
+---
+
+### 4. Run the application
+
+Go back to root:
+
+```bash id="7ap6e2"
+cd ..
+docker-compose up --build
+```
+
+---
+
+### 5. Access the application
+
+- Frontend: http://localhost:5173
+- Backend: http://localhost:5000
+
+---
+
 ## 🚀 Features
 
 ### 🔐 Authentication
@@ -62,8 +131,8 @@ This application allows authenticated users to manage their own product inventor
 
 ### 🐳 Docker Support
 
-- Fully containerized setup
-- One-command startup
+- Fully containerized setup (frontend, backend, database)
+- One-command startup via Docker Compose
 
 ---
 
@@ -91,106 +160,31 @@ This application allows authenticated users to manage their own product inventor
 
 ---
 
-## 📁 Project Structure
+## 💻 Local Development (Without Docker)
 
-```bash
-root/
- ├── backend/
- ├── frontend/
- ├── docker-compose.yml
- └── README.md
-```
+### Backend
 
----
-
-## ⚙️ Setup Instructions
-
-### 🔹 Prerequisites
-
-Make sure you have installed:
-
-- Node.js (v18+ recommended)
-- Docker & Docker Compose
-
----
-
-## 🐳 Option 1: Run with Docker (Recommended)
-
-👉 One command setup:
-
-```bash
-docker-compose up --build
-```
-
-### 🔗 Services
-
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:5000
-- MongoDB: running inside Docker
-
----
-
-## 💻 Option 2: Local Development Setup
-
-### 1. Clone Repository
-
-```bash
-git clone <your-repo-url>
-cd product-inventory-manager
-```
-
----
-
-### 2. Setup Backend
-
-```bash
+```bash id="v3o4aj"
 cd backend
 npm install
-```
-
-Create `.env` file:
-
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/product-inventory
-MONGO_TEST_URI=mongodb://localhost:27017/product-inventory-test
-JWT_ACCESS_SECRET=your_access_secret
-JWT_REFRESH_SECRET=your_refresh_secret
-```
-
-### 3. MongoDB Requirement (Local Development)
-
-If you are running the backend locally (without Docker), make sure MongoDB is running.
-
-You can quickly start MongoDB using Docker:
-
-````bash
-docker run -d -p 27017:27017 --name mongo mongo
-
-Run backend:
-
-```bash
+cp .env.example .env
 npm run dev
-````
+```
+
+👉 Ensure MongoDB is running locally:
+
+```bash id="yx1r0c"
+docker run -d -p 27017:27017 --name mongo mongo
+```
 
 ---
 
-### 4. Setup Frontend
+### Frontend
 
-```bash
+```bash id="4k4y0m"
 cd frontend
 npm install
-```
-
-Create `.env` file:
-
-```env
-VITE_API_URL=http://localhost:5000
-```
-
-Run frontend:
-
-```bash
+cp .env.example .env
 npm run dev
 ```
 
@@ -198,18 +192,10 @@ npm run dev
 
 ## 🧪 Running Tests
 
-Backend tests:
-
-```bash
+```bash id="1b6p2y"
 cd backend
 npm test
 ```
-
-### Notes:
-
-- Uses test database (`MONGO_TEST_URI`)
-- Database is cleaned after each test
-- Tests run sequentially (`--runInBand`)
 
 ---
 
@@ -227,39 +213,17 @@ npm test
 
 ## 📌 Architecture Decisions
 
-### 🔹 Multi-Tenant Design
-
-Each user can only access their own products using `createdBy` filtering.
-
----
-
-### 🔹 Test Strategy
-
-- Test-first (scenario-driven)
-- Full coverage of edge cases
-- Real DB testing (Docker Mongo)
-
----
-
-### 🔹 File Upload
-
-- Local storage used for assignment
-- Easily replaceable with AWS S3 in production
-
----
-
-### 🔹 API Design
-
-- RESTful architecture
-- Standard response format
-- Centralized error handling
+- Multi-tenant design using `createdBy`
+- Scenario-based testing with real DB
+- RESTful API with standardized responses
+- Local file storage (S3-ready structure)
 
 ---
 
 ## ⚠️ Known Limitations
 
 - Local file storage (not cloud-based)
-- No role-based UI (backend ready)
+- No role-based UI
 - No real-time updates
 
 ---
@@ -267,19 +231,28 @@ Each user can only access their own products using `createdBy` filtering.
 ## 🚀 Future Improvements
 
 - AWS S3 integration
-- Role-based access control (admin panel)
-- WebSocket for real-time updates
-- Advanced analytics dashboard
+- Role-based access control
+- WebSocket updates
+- Advanced analytics
+
+---
+
+## ✅ Verification
+
+Tested via:
+
+- Fresh clone
+- Docker setup
+- Local setup
 
 ---
 
 ## 👨‍💻 Author
 
 Narendra Singh
-Senior Full Stack Developer
 
 ---
 
 ## 📝 License
 
-This project is part of a technical assessment.
+Technical assessment project
