@@ -33,6 +33,8 @@ Enable product image upload using local storage.
 
 ## 🅐 Phase A — Upload Test Cases
 
+**Status:** ✅ Complete
+
 - Valid image upload
 - Invalid file type
 - Missing file
@@ -41,16 +43,22 @@ Enable product image upload using local storage.
 
 ## 🅑 Phase B — Middleware Setup
 
+**Status:** ✅ Complete
+
 - Multer config
 
 ---
 
 ## 🅒 Phase C — Integration with Product
 
+**Status:** ✅ Complete
+
 - Save image URL
 
 ---
 
 ## 🅓 Phase D — Verification
+
+**Status:** ✅ Complete
 
 - Upload works end-to-end
