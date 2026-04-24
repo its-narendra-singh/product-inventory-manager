@@ -1,7 +1,12 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import { sendSuccess } from '../utils/apiResponse.js';
 import AppError from '../utils/AppError.js';
-import { registerUser, loginUser, rotateRefreshToken, logoutUser } from '../services/auth.service.js';
+import {
+  registerUser,
+  loginUser,
+  rotateRefreshToken,
+  logoutUser,
+} from '../services/auth.service.js';
 
 const COOKIE_BASE = {
   httpOnly: true,

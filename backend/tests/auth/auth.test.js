@@ -1,24 +1,20 @@
+import 'dotenv/config';
 import request from 'supertest';
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import app from '../../app.js';
 
-let mongoServer;
-
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri());
-}, 60000);
+  await mongoose.connect(process.env.MONGO_TEST_URI);
+});
 
 afterAll(async () => {
   await mongoose.disconnect();
-  await mongoServer?.stop();
 });
 
 afterEach(async () => {
   if (mongoose.connection.readyState !== 1) return;
   const { collections } = mongoose.connection;
-  await Promise.all(Object.values(collections).map(col => col.deleteMany({})));
+  await Promise.all(Object.values(collections).map((col) => col.deleteMany({})));
 });
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
@@ -31,16 +27,15 @@ const validUser = {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const register = (body = validUser) =>
-  request(app).post('/api/auth/register').send(body);
+const register = (body = validUser) => request(app).post('/api/auth/register').send(body);
 
 const login = (body = { email: validUser.email, password: validUser.password }) =>
   request(app).post('/api/auth/login').send(body);
 
-const getRefreshCookie = cookies => cookies?.find(c => c.startsWith('refreshToken='));
+const getRefreshCookie = (cookies) => cookies?.find((c) => c.startsWith('refreshToken='));
 
 const isCookieCleared = (cookies, name) => {
-  const cookie = cookies?.find(c => c.includes(`${name}=`));
+  const cookie = cookies?.find((c) => c.includes(`${name}=`));
   return !!(
     cookie &&
     (cookie.includes('Max-Age=0') ||
@@ -76,7 +71,7 @@ describe('Auth API', () => {
 
         const cookies = res.headers['set-cookie'];
         expect(getRefreshCookie(cookies)).toBeDefined();
-        expect(cookies.some(c => c.includes('HttpOnly'))).toBe(true);
+        expect(cookies.some((c) => c.includes('HttpOnly'))).toBe(true);
       });
     });
 
@@ -132,7 +127,7 @@ describe('Auth API', () => {
 
         const cookies = res.headers['set-cookie'];
         expect(getRefreshCookie(cookies)).toBeDefined();
-        expect(cookies.some(c => c.includes('HttpOnly'))).toBe(true);
+        expect(cookies.some((c) => c.includes('HttpOnly'))).toBe(true);
       });
     });
 
@@ -178,9 +173,7 @@ describe('Auth API', () => {
 
     describe('Happy Path', () => {
       it('returns 200 with a new access token when a valid refresh token cookie is provided', async () => {
-        const res = await request(app)
-          .post('/api/auth/refresh')
-          .set('Cookie', refreshCookie);
+        const res = await request(app).post('/api/auth/refresh').set('Cookie', refreshCookie);
 
         expect(res.statusCode).toBe(200);
         expect(res.body.success).toBe(true);
@@ -188,9 +181,7 @@ describe('Auth API', () => {
       });
 
       it('rotates the refresh token by issuing a new cookie on each use', async () => {
-        const res = await request(app)
-          .post('/api/auth/refresh')
-          .set('Cookie', refreshCookie);
+        const res = await request(app).post('/api/auth/refresh').set('Cookie', refreshCookie);
 
         expect(getRefreshCookie(res.headers['set-cookie'])).toBeDefined();
       });
@@ -216,9 +207,7 @@ describe('Auth API', () => {
       it('returns 401 when a used (rotated) refresh token is replayed', async () => {
         await request(app).post('/api/auth/refresh').set('Cookie', refreshCookie);
 
-        const res = await request(app)
-          .post('/api/auth/refresh')
-          .set('Cookie', refreshCookie);
+        const res = await request(app).post('/api/auth/refresh').set('Cookie', refreshCookie);
 
         expect(res.statusCode).toBe(401);
         expect(res.body.success).toBe(false);
@@ -259,9 +248,7 @@ describe('Auth API', () => {
           .set('Cookie', refreshCookie)
           .set('Authorization', `Bearer ${accessToken}`);
 
-        const res = await request(app)
-          .post('/api/auth/refresh')
-          .set('Cookie', refreshCookie);
+        const res = await request(app).post('/api/auth/refresh').set('Cookie', refreshCookie);
 
         expect(res.statusCode).toBe(401);
         expect(res.body.success).toBe(false);
